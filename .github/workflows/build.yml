@@ -1,9 +1,8 @@
-name: Build binaries
+name: Build & Publish
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -21,6 +20,8 @@ jobs:
             target: aarch64-apple-darwin
           - os: windows-latest
             target: x86_64-pc-windows-msvc
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
 
     name: Build - ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
@@ -80,10 +81,11 @@ jobs:
           path: artifacts
 
       - name: Copy binaries
+        shell: bash
         run: |
           mkdir -p dist
-          cp -r artifacts/*/*.node . 2>/dev/null || true
-          cp -r artifacts/*/dist/* dist/ 2>/dev/null || true
+          find artifacts -name "*.node" -exec cp {} . \;
+          find artifacts -name "dist" -type d -exec cp -r {} . \;
 
       - name: Build TypeScript
         run: npm run build:ts
