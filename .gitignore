@@ -1,0 +1,6 @@
+node_modules/
+target/
+dist/
+*.node
+index.cjs
+.turbo-ncu-cache.json

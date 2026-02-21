@@ -1,0 +1,38 @@
+{
+  "name": "turbo-ncu",
+  "version": "0.1.0",
+  "description": "Fast npm-check-updates clone powered by Rust",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "turbo-ncu": "./dist/bin/turbo-ncu.js"
+  },
+  "napi": {
+    "name": "turbo-ncu",
+    "triples": {}
+  },
+  "scripts": {
+    "build:rs": "napi build --platform --release --js index.cjs",
+    "build:ts": "tsdown",
+    "build": "npm run build:rs && npm run build:ts",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "glob": "^11.0.1",
+    "js-yaml": "^4.1.0",
+    "minimatch": "^10.0.1",
+    "ora": "^9.3.0"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^2.18.4",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.15.0",
+    "tsdown": "^0.20.3",
+    "typescript": "^5.7.3",
+    "vitest": "^3.1.1"
+  }
+}
