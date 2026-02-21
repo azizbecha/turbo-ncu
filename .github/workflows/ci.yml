@@ -71,6 +71,9 @@ jobs:
       - name: Build Rust
         run: npm run build:rs
 
+      - name: Verify native module
+        run: ls -la index.cjs *.node
+
       - name: Build TypeScript
         run: npm run build:ts
 
