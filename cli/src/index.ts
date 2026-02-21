@@ -1,5 +1,7 @@
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { createRequire } from "node:module";
+import chalk from "chalk";
 import type { CheckOptions, PackageInfo, CheckResult, UpdateResult } from "../../index.js";
 
 const require = createRequire(import.meta.url);
@@ -29,6 +31,19 @@ import {
 import { writeUpdates } from "./package-writer.js";
 import type { CliOptions, DepType } from "./types.js";
 import { discoverWorkspaces } from "./workspace.js";
+
+function detectPackageManager(dir: string): string {
+  if (fs.existsSync(path.join(dir, "bun.lockb")) || fs.existsSync(path.join(dir, "bun.lock"))) {
+    return "bun";
+  }
+  if (fs.existsSync(path.join(dir, "pnpm-lock.yaml"))) {
+    return "pnpm";
+  }
+  if (fs.existsSync(path.join(dir, "yarn.lock"))) {
+    return "yarn";
+  }
+  return "npm";
+}
 
 interface RunTarget {
   label: string;
@@ -177,7 +192,9 @@ export async function run(opts: CliOptions): Promise<number> {
     if (mergedOpts.upgrade && target.packageJsonPath && result.updates.length > 0) {
       writeUpdates(target.packageJsonPath, result.updates);
       if (!isJsonOutput) {
+        const pm = detectPackageManager(path.dirname(target.packageJsonPath));
         console.log(`\nUpdated ${target.packageJsonPath}`);
+        console.log(chalk.cyan(`Run ${chalk.bold(`${pm} install`)} to install new versions`));
       }
     }
 
@@ -196,6 +213,9 @@ export async function run(opts: CliOptions): Promise<number> {
     console.log(
       formatSummary(totalChecked, allUpdates.length, totalTimeMs, totalCacheHits, totalCacheMisses),
     );
+    if (allUpdates.length > 0 && !mergedOpts.upgrade) {
+      console.log("\nRun turbo-ncu --upgrade to update your package.json");
+    }
   }
 
   // Exit code
