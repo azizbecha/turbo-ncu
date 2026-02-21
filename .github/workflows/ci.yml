@@ -72,7 +72,7 @@ jobs:
         run: npm run build:rs
 
       - name: Verify native module
-        run: ls -la index.cjs *.node
+        run: ls -la *.node
 
       - name: Build TypeScript
         run: npm run build:ts

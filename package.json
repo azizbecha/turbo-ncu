@@ -10,7 +10,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build:rs": "napi build --platform --release --js index.cjs",
+    "build:rs": "napi build --platform --release --no-js --dts .napi-output.d.ts && rm -f .napi-output.d.ts",
     "build:ts": "tsdown",
     "build": "npm run build:rs && npm run build:ts",
     "test": "vitest run",
@@ -52,7 +52,6 @@
   },
   "napi": {
     "binaryName": "turbo-ncu",
-    "dts": false,
     "triples": {}
   }
 }
