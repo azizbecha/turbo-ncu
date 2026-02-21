@@ -1,11 +1,11 @@
-import { execSync } from 'node:child_process';
-import type { PackageInfo } from '../../index.js';
+import { execSync } from "node:child_process";
+import type { PackageInfo } from "../../index.js";
 
 export function getGlobalPackages(): PackageInfo[] {
   try {
-    const output = execSync('npm ls -g --depth=0 --json', {
-      encoding: 'utf-8',
-      stdio: ['pipe', 'pipe', 'pipe'],
+    const output = execSync("npm ls -g --depth=0 --json", {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
     });
 
     const parsed = JSON.parse(output);
@@ -18,7 +18,7 @@ export function getGlobalPackages(): PackageInfo[] {
         packages.push({
           name,
           versionRange: `^${version}`,
-          depType: 'prod',
+          depType: "prod",
         });
       }
     }

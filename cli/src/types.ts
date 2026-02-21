@@ -1,6 +1,6 @@
 export interface CliOptions {
   upgrade: boolean;
-  target: 'latest' | 'minor' | 'patch' | 'semver';
+  target: "latest" | "minor" | "patch" | "semver";
   filter?: string;
   reject?: string;
   dep: string[];
@@ -36,11 +36,11 @@ export interface PackageJson {
   [key: string]: unknown;
 }
 
-export type DepType = 'prod' | 'dev' | 'peer' | 'optional';
+export type DepType = "prod" | "dev" | "peer" | "optional";
 
 export const DEP_TYPE_MAP: Record<DepType, keyof PackageJson> = {
-  prod: 'dependencies',
-  dev: 'devDependencies',
-  peer: 'peerDependencies',
-  optional: 'optionalDependencies',
+  prod: "dependencies",
+  dev: "devDependencies",
+  peer: "peerDependencies",
+  optional: "optionalDependencies",
 };

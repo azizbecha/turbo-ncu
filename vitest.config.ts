@@ -1,8 +1,8 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ['__test__/**/*.test.ts'],
+    include: ["__test__/**/*.test.ts"],
     testTimeout: 60000,
   },
 });

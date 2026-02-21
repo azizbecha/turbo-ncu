@@ -1,0 +1,17 @@
+{
+  "plugins": ["typescript", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "pedantic": "off"
+  },
+  "ignorePatterns": ["node_modules", "dist", "target", "*.node", "index.cjs", "index.d.ts"],
+  "overrides": [
+    {
+      "files": ["__test__/**/*.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

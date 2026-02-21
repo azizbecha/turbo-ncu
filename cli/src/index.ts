@@ -1,28 +1,34 @@
-import * as path from 'node:path';
-import { createRequire } from 'node:module';
-import type { CheckOptions, PackageInfo, CheckResult, UpdateResult } from '../../index.js';
+import * as path from "node:path";
+import { createRequire } from "node:module";
+import type { CheckOptions, PackageInfo, CheckResult, UpdateResult } from "../../index.js";
 
 const require = createRequire(import.meta.url);
 const native: {
   checkUpdates: (packages: PackageInfo[], options: CheckOptions) => Promise<CheckResult>;
   clearCache: (cacheFile?: string) => void;
-} = require('../../index.cjs');
+} = require("../../index.cjs");
 const checkUpdates = native.checkUpdates;
 
-import { loadConfig } from './config.js';
-import { applyFilters } from './filter.js';
-import { formatTable, formatJson, formatJsonAll, formatSummary, formatHeader } from './formatter.js';
-import { getGlobalPackages } from './global.js';
-import * as spinner from './spinner.js';
+import { loadConfig } from "./config.js";
+import { applyFilters } from "./filter.js";
+import {
+  formatTable,
+  formatJson,
+  formatJsonAll,
+  formatSummary,
+  formatHeader,
+} from "./formatter.js";
+import { getGlobalPackages } from "./global.js";
+import * as spinner from "./spinner.js";
 import {
   readPackageJson,
   findPackageJson,
   extractPackages,
   parseDepTypes,
-} from './package-reader.js';
-import { writeUpdates } from './package-writer.js';
-import type { CliOptions, DepType } from './types.js';
-import { discoverWorkspaces } from './workspace.js';
+} from "./package-reader.js";
+import { writeUpdates } from "./package-writer.js";
+import type { CliOptions, DepType } from "./types.js";
+import { discoverWorkspaces } from "./workspace.js";
 
 interface RunTarget {
   label: string;
@@ -33,7 +39,7 @@ interface RunTarget {
 function resolveTargets(opts: CliOptions): RunTarget[] | Promise<RunTarget[]> {
   if (opts.global) {
     const packages = getGlobalPackages();
-    return [{ label: 'global', packageJsonPath: '', packages }];
+    return [{ label: "global", packageJsonPath: "", packages }];
   }
 
   const depTypes = parseDepTypes(opts.dep) as DepType[];
@@ -42,9 +48,7 @@ function resolveTargets(opts: CliOptions): RunTarget[] | Promise<RunTarget[]> {
     return resolveWorkspaceTargets(opts, depTypes);
   }
 
-  const pkgPath = opts.packageFile
-    ? path.resolve(opts.packageFile)
-    : findPackageJson();
+  const pkgPath = opts.packageFile ? path.resolve(opts.packageFile) : findPackageJson();
   const pkg = readPackageJson(pkgPath);
   const packages = extractPackages(pkg, depTypes);
 
@@ -53,7 +57,7 @@ function resolveTargets(opts: CliOptions): RunTarget[] | Promise<RunTarget[]> {
 
 async function resolveWorkspaceTargets(
   opts: CliOptions,
-  depTypes: DepType[]
+  depTypes: DepType[],
 ): Promise<RunTarget[]> {
   const rootDir = process.cwd();
   const workspaces = await discoverWorkspaces(rootDir, opts.workspace);
@@ -65,7 +69,7 @@ async function resolveWorkspaceTargets(
       const rootPkg = readPackageJson(rootPkgPath);
       const packages = extractPackages(rootPkg, depTypes);
       targets.push({
-        label: rootPkg.name || 'root',
+        label: rootPkg.name || "root",
         packageJsonPath: rootPkgPath,
         packages,
       });
@@ -100,7 +104,7 @@ export async function run(opts: CliOptions): Promise<number> {
 
   // Print header
   if (!isJsonOutput && isTTY) {
-    console.log(formatHeader('0.1.0'));
+    console.log(formatHeader("0.1.0"));
     console.log();
   }
 
@@ -109,7 +113,7 @@ export async function run(opts: CliOptions): Promise<number> {
   const targets = await resolveTargets(mergedOpts);
   const totalPackages = targets.reduce((sum, t) => sum + t.packages.length, 0);
   spinner.succeed(
-    `Found ${totalPackages} packages across ${targets.length} target${targets.length === 1 ? '' : 's'}`
+    `Found ${totalPackages} packages across ${targets.length} target${targets.length === 1 ? "" : "s"}`,
   );
 
   const checkOptions: CheckOptions = {
@@ -131,17 +135,13 @@ export async function run(opts: CliOptions): Promise<number> {
   const multiTarget = targets.length > 1;
 
   for (const target of targets) {
-    const filtered = applyFilters(
-      target.packages,
-      mergedOpts.filter,
-      mergedOpts.reject
-    );
+    const filtered = applyFilters(target.packages, mergedOpts.filter, mergedOpts.reject);
 
     if (filtered.length === 0) continue;
     totalChecked += filtered.length;
 
     // Start checking spinner with simulated per-package progress
-    const targetLabel = multiTarget ? target.label : '';
+    const targetLabel = multiTarget ? target.label : "";
     spinner.startChecking(targetLabel, filtered.length);
 
     let progressIndex = 0;
@@ -150,7 +150,7 @@ export async function run(opts: CliOptions): Promise<number> {
       spinner.updatePackageProgress(
         progressIndex + 1,
         filtered.length,
-        filtered[progressIndex].name
+        filtered[progressIndex].name,
       );
     }, 150);
 
@@ -161,7 +161,7 @@ export async function run(opts: CliOptions): Promise<number> {
     totalCacheMisses += result.cacheMisses;
 
     spinner.succeed(
-      `Checked ${filtered.length} packages (${result.cacheMisses} fetched, ${result.cacheHits} from cache)`
+      `Checked ${filtered.length} packages (${result.cacheMisses} fetched, ${result.cacheHits} from cache)`,
     );
 
     if (multiTarget && result.updates.length > 0 && !isJsonOutput) {
@@ -194,7 +194,7 @@ export async function run(opts: CliOptions): Promise<number> {
       console.log(formatTable([]));
     }
     console.log(
-      formatSummary(totalChecked, allUpdates.length, totalTimeMs, totalCacheHits, totalCacheMisses)
+      formatSummary(totalChecked, allUpdates.length, totalTimeMs, totalCacheHits, totalCacheMisses),
     );
   }
 

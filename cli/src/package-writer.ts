@@ -1,17 +1,14 @@
-import * as fs from 'node:fs';
-import type { UpdateResult } from '../../index.js';
-import type { PackageJson } from './types.js';
-import { DEP_TYPE_MAP, type DepType } from './types.js';
+import * as fs from "node:fs";
+import type { UpdateResult } from "../../index.js";
+import type { PackageJson } from "./types.js";
+import { DEP_TYPE_MAP, type DepType } from "./types.js";
 
-export function writeUpdates(
-  filePath: string,
-  updates: UpdateResult[]
-): void {
-  const raw = fs.readFileSync(filePath, 'utf-8');
+export function writeUpdates(filePath: string, updates: UpdateResult[]): void {
+  const raw = fs.readFileSync(filePath, "utf-8");
 
   // Detect indentation
   const indentMatch = raw.match(/^(\s+)"/m);
-  const indent = indentMatch ? indentMatch[1] : '  ';
+  const indent = indentMatch ? indentMatch[1] : "  ";
 
   // Parse and update
   const pkg: PackageJson = JSON.parse(raw);
@@ -26,11 +23,11 @@ export function writeUpdates(
   }
 
   // Detect trailing newline
-  const trailingNewline = raw.endsWith('\n');
+  const trailingNewline = raw.endsWith("\n");
   let output = JSON.stringify(pkg, null, indent);
   if (trailingNewline) {
-    output += '\n';
+    output += "\n";
   }
 
-  fs.writeFileSync(filePath, output, 'utf-8');
+  fs.writeFileSync(filePath, output, "utf-8");
 }

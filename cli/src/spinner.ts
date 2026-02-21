@@ -1,4 +1,4 @@
-import ora, { type Ora } from 'ora';
+import ora, { type Ora } from "ora";
 
 let spinner: Ora | null = null;
 let silent = false;
@@ -13,14 +13,12 @@ export function isSilent(): boolean {
 
 export function startResolving(): void {
   if (silent) return;
-  spinner = ora('Resolving packages...').start();
+  spinner = ora("Resolving packages...").start();
 }
 
 export function startChecking(label: string, count: number): void {
   if (silent) return;
-  const msg = label
-    ? `Checking ${count} packages in ${label}...`
-    : `Checking ${count} packages...`;
+  const msg = label ? `Checking ${count} packages in ${label}...` : `Checking ${count} packages...`;
   spinner = ora(msg).start();
 }
 

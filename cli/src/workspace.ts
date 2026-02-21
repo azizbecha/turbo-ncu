@@ -1,7 +1,7 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { glob } from 'glob';
-import type { PackageJson } from './types.js';
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { glob } from "glob";
+import type { PackageJson } from "./types.js";
 
 export interface WorkspaceInfo {
   name: string;
@@ -11,16 +11,14 @@ export interface WorkspaceInfo {
 
 export async function discoverWorkspaces(
   rootDir: string,
-  specificWorkspace?: string
+  specificWorkspace?: string,
 ): Promise<WorkspaceInfo[]> {
-  const rootPkgPath = path.resolve(rootDir, 'package.json');
+  const rootPkgPath = path.resolve(rootDir, "package.json");
   if (!fs.existsSync(rootPkgPath)) {
     return [];
   }
 
-  const rootPkg: PackageJson = JSON.parse(
-    fs.readFileSync(rootPkgPath, 'utf-8')
-  );
+  const rootPkg: PackageJson = JSON.parse(fs.readFileSync(rootPkgPath, "utf-8"));
 
   // Get workspace patterns
   let patterns: string[] = [];
@@ -31,8 +29,8 @@ export async function discoverWorkspaces(
       patterns = rootPkg.workspaces;
     } else if (
       rootPkg.workspaces &&
-      typeof rootPkg.workspaces === 'object' &&
-      'packages' in rootPkg.workspaces
+      typeof rootPkg.workspaces === "object" &&
+      "packages" in rootPkg.workspaces
     ) {
       patterns = (rootPkg.workspaces as { packages: string[] }).packages;
     }
@@ -40,11 +38,11 @@ export async function discoverWorkspaces(
 
   // pnpm-workspace.yaml
   if (patterns.length === 0) {
-    const pnpmPath = path.resolve(rootDir, 'pnpm-workspace.yaml');
+    const pnpmPath = path.resolve(rootDir, "pnpm-workspace.yaml");
     if (fs.existsSync(pnpmPath)) {
       try {
-        const yaml = await import('js-yaml');
-        const content = fs.readFileSync(pnpmPath, 'utf-8');
+        const yaml = await import("js-yaml");
+        const content = fs.readFileSync(pnpmPath, "utf-8");
         const parsed = yaml.load(content) as { packages?: string[] };
         if (parsed?.packages) {
           patterns = parsed.packages;
@@ -70,13 +68,11 @@ export async function discoverWorkspaces(
 
     for (const match of matches) {
       const wsDir = path.resolve(rootDir, match);
-      const wsPkgPath = path.resolve(wsDir, 'package.json');
+      const wsPkgPath = path.resolve(wsDir, "package.json");
 
       if (!fs.existsSync(wsPkgPath)) continue;
 
-      const wsPkg: PackageJson = JSON.parse(
-        fs.readFileSync(wsPkgPath, 'utf-8')
-      );
+      const wsPkg: PackageJson = JSON.parse(fs.readFileSync(wsPkgPath, "utf-8"));
       const name = wsPkg.name || match;
 
       // If specific workspace requested, filter

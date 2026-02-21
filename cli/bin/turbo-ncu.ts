@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { createProgram } from '../src/cli.js';
-import { run } from '../src/index.js';
-import type { CliOptions } from '../src/types.js';
+import { createProgram } from "../src/cli.js";
+import { run } from "../src/index.js";
+import type { CliOptions } from "../src/types.js";
 
 async function main() {
   const program = createProgram();

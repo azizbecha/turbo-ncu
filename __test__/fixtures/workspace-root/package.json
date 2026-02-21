@@ -1,7 +1,9 @@
 {
   "name": "test-workspace",
   "version": "1.0.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "lodash": "^4.0.0"
   }

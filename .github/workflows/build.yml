@@ -3,7 +3,7 @@ name: Build binaries
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm ci
@@ -68,8 +68,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm ci
@@ -84,6 +84,9 @@ jobs:
           mkdir -p dist
           cp -r artifacts/*/*.node . 2>/dev/null || true
           cp -r artifacts/*/dist/* dist/ 2>/dev/null || true
+
+      - name: Build TypeScript
+        run: npm run build:ts
 
       - name: Publish to npm
         run: npm publish --provenance

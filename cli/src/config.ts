@@ -1,21 +1,12 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { createRequire } from 'node:module';
-import yaml from 'js-yaml';
-import type { CliOptions } from './types.js';
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { createRequire } from "node:module";
+import yaml from "js-yaml";
+import type { CliOptions } from "./types.js";
 
-const CONFIG_FILES = [
-  '.ncurc.json',
-  '.ncurc.yml',
-  '.ncurc.yaml',
-  '.ncurc.js',
-  '.ncurc.cjs',
-];
+const CONFIG_FILES = [".ncurc.json", ".ncurc.yml", ".ncurc.yaml", ".ncurc.js", ".ncurc.cjs"];
 
-export function loadConfig(
-  configFile?: string,
-  searchDir?: string
-): Partial<CliOptions> {
+export function loadConfig(configFile?: string, searchDir?: string): Partial<CliOptions> {
   if (configFile) {
     return loadConfigFile(configFile);
   }
@@ -34,17 +25,17 @@ export function loadConfig(
 function loadConfigFile(filePath: string): Partial<CliOptions> {
   const ext = path.extname(filePath).toLowerCase();
 
-  if (ext === '.json') {
-    const content = fs.readFileSync(filePath, 'utf-8');
+  if (ext === ".json") {
+    const content = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(content);
   }
 
-  if (ext === '.yml' || ext === '.yaml') {
-    const content = fs.readFileSync(filePath, 'utf-8');
+  if (ext === ".yml" || ext === ".yaml") {
+    const content = fs.readFileSync(filePath, "utf-8");
     return (yaml.load(content) as Partial<CliOptions>) || {};
   }
 
-  if (ext === '.js' || ext === '.cjs') {
+  if (ext === ".js" || ext === ".cjs") {
     const require = createRequire(import.meta.url);
     return require(path.resolve(filePath));
   }

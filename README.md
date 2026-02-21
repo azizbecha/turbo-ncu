@@ -1,6 +1,10 @@
 # turbo-ncu
 
-⚡ Fast npm-check-updates clone powered by Rust. Check your npm dependencies for updates quickly and efficiently.
+[![CI](https://github.com/azizbecha/turbo-ncu/actions/workflows/ci.yml/badge.svg)](https://github.com/azizbecha/turbo-ncu/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/turbo-ncu)](https://www.npmjs.com/package/turbo-ncu)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+Fast npm-check-updates clone powered by Rust. Check your npm dependencies for updates quickly and efficiently.
 
 ## Features
 
@@ -249,6 +253,10 @@ turbo-ncu --json > updates.json
 - Use `--filter` to limit checks to relevant packages
 - Adjust `--timeout` if you're behind a slow network
 
+## Development
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, project structure, and contribution guidelines.
+
 ## License
 
-MIT
+[MIT](./LICENSE)

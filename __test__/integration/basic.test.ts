@@ -1,23 +1,23 @@
-import { describe, it, expect } from 'vitest';
-import { createRequire } from 'node:module';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { describe, it, expect } from "vitest";
+import { createRequire } from "node:module";
+import * as path from "node:path";
+
+import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const native = require('../../index.cjs');
+const native = require("../../index.cjs");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-describe('checkUpdates', () => {
-  it('should find updates for outdated packages', async () => {
+describe("checkUpdates", () => {
+  it("should find updates for outdated packages", async () => {
     const packages = [
-      { name: 'lodash', versionRange: '^4.0.0', depType: 'prod' },
-      { name: 'chalk', versionRange: '^4.0.0', depType: 'prod' },
+      { name: "lodash", versionRange: "^4.0.0", depType: "prod" },
+      { name: "chalk", versionRange: "^4.0.0", depType: "prod" },
     ];
 
     const result = await native.checkUpdates(packages, {
-      target: 'latest',
+      target: "latest",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -35,18 +35,16 @@ describe('checkUpdates', () => {
       expect(update.current).toBeDefined();
       expect(update.newRange).toBeDefined();
       expect(update.updateType).toBeDefined();
-      expect(['major', 'minor', 'patch', 'prerelease']).toContain(update.updateType);
+      expect(["major", "minor", "patch", "prerelease"]).toContain(update.updateType);
     }
   });
 
-  it('should return empty updates for packages at latest', async () => {
+  it("should return empty updates for packages at latest", async () => {
     // Use a version range that's very high - unlikely to have updates
-    const packages = [
-      { name: 'lodash', versionRange: '^99999.0.0', depType: 'prod' },
-    ];
+    const packages = [{ name: "lodash", versionRange: "^99999.0.0", depType: "prod" }];
 
     const result = await native.checkUpdates(packages, {
-      target: 'latest',
+      target: "latest",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -56,13 +54,11 @@ describe('checkUpdates', () => {
     expect(result.updates).toEqual([]);
   });
 
-  it('should respect target=minor', async () => {
-    const packages = [
-      { name: 'typescript', versionRange: '^4.0.0', depType: 'dev' },
-    ];
+  it("should respect target=minor", async () => {
+    const packages = [{ name: "typescript", versionRange: "^4.0.0", depType: "dev" }];
 
     const result = await native.checkUpdates(packages, {
-      target: 'minor',
+      target: "minor",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -75,13 +71,11 @@ describe('checkUpdates', () => {
     }
   });
 
-  it('should respect target=patch', async () => {
-    const packages = [
-      { name: 'lodash', versionRange: '^4.17.0', depType: 'prod' },
-    ];
+  it("should respect target=patch", async () => {
+    const packages = [{ name: "lodash", versionRange: "^4.17.0", depType: "prod" }];
 
     const result = await native.checkUpdates(packages, {
-      target: 'patch',
+      target: "patch",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -94,13 +88,11 @@ describe('checkUpdates', () => {
     }
   });
 
-  it('should handle scoped packages', async () => {
-    const packages = [
-      { name: '@types/node', versionRange: '^18.0.0', depType: 'dev' },
-    ];
+  it("should handle scoped packages", async () => {
+    const packages = [{ name: "@types/node", versionRange: "^18.0.0", depType: "dev" }];
 
     const result = await native.checkUpdates(packages, {
-      target: 'latest',
+      target: "latest",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -108,16 +100,14 @@ describe('checkUpdates', () => {
     });
 
     expect(result.updates.length).toBeGreaterThan(0);
-    expect(result.updates[0].name).toBe('@types/node');
+    expect(result.updates[0].name).toBe("@types/node");
   });
 
-  it('should report cache hits on second call', async () => {
-    const packages = [
-      { name: 'lodash', versionRange: '^4.0.0', depType: 'prod' },
-    ];
+  it("should report cache hits on second call", async () => {
+    const packages = [{ name: "lodash", versionRange: "^4.0.0", depType: "prod" }];
 
     const options = {
-      target: 'latest',
+      target: "latest",
       concurrency: 24,
       timeoutMs: 30000,
       cacheTtlSeconds: 600,
@@ -133,8 +123,8 @@ describe('checkUpdates', () => {
   });
 });
 
-describe('clearCache', () => {
-  it('should clear cache without error', () => {
+describe("clearCache", () => {
+  it("should clear cache without error", () => {
     expect(() => native.clearCache()).not.toThrow();
   });
 });
