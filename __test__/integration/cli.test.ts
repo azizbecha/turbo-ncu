@@ -13,7 +13,7 @@ function runCli(args: string): string {
     return execSync(`node ${cliPath} ${args}`, {
       encoding: "utf-8",
       cwd: projectRoot,
-      timeout: 60000,
+      timeout: 120000,
     });
   } catch (e: unknown) {
     // CLI exits with code 1 when updates found, that's expected

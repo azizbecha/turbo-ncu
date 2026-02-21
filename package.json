@@ -52,6 +52,7 @@
   },
   "napi": {
     "binaryName": "turbo-ncu",
+    "dts": false,
     "triples": {}
   }
 }
