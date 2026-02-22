@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Fast npm-check-updates clone powered by Rust",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azizbecha/turbo-ncu"
+  },
   "bin": {
     "turbo-ncu": "./dist/bin/turbo-ncu.js"
   },
