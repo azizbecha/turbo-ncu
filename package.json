@@ -21,7 +21,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build:rs": "napi build --platform --release --no-js --dts .napi-output.d.ts && rm -f .napi-output.d.ts",
+    "build:rs": "napi build --release --no-js --dts .napi-output.d.ts && rm -f .napi-output.d.ts",
     "build:ts": "tsdown",
     "build": "npm run build:rs && npm run build:ts",
     "test": "vitest run",
