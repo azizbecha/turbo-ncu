@@ -93,6 +93,13 @@ jobs:
       - name: Build TypeScript
         run: npm run build:ts
 
+      - name: Verify all binaries present
+        shell: bash
+        run: |
+          echo "Binaries to be published:"
+          ls -lh *.node
+          echo "Total binaries: $(ls -1 *.node | wc -l)"
+
       - name: Publish to npm
         run: npm publish --provenance
         env:
