@@ -1,6 +1,6 @@
 {
   "name": "turbo-ncu",
-  "version": "0.0.1",
+  "version": "0.0.1-rc",
   "description": "Fast npm-check-updates clone powered by Rust",
   "license": "MIT",
   "bin": {
