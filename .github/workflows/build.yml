@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Rust
         run: npm run build:rs -- --target ${{ matrix.target }}
         env:
           CARGO_BUILD_TARGET: ${{ matrix.target }}
@@ -53,7 +53,6 @@ jobs:
           name: binaries-${{ matrix.target }}
           path: |
             *.node
-            dist/
 
   publish:
     needs: build
@@ -90,8 +89,6 @@ jobs:
           find artifacts -name "*.node" -exec cp {} . \;
           echo "Binaries in root:"
           ls -la *.node 2>/dev/null || echo "No binaries found!"
-          # Copy dist files from first artifact only (they're identical across builds)
-          cp -r artifacts/binaries-*/dist . || true
 
       - name: Build TypeScript
         run: npm run build:ts
