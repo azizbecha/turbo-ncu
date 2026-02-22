@@ -83,7 +83,13 @@ jobs:
       - name: Copy binaries
         shell: bash
         run: |
+          echo "Artifacts downloaded:"
+          ls -la artifacts/
+          echo "Finding all .node files:"
+          find artifacts -name "*.node" -exec echo {} \;
           find artifacts -name "*.node" -exec cp {} . \;
+          echo "Binaries in root:"
+          ls -la *.node 2>/dev/null || echo "No binaries found!"
           # Copy dist files from first artifact only (they're identical across builds)
           cp -r artifacts/binaries-*/dist . || true
 
