@@ -83,9 +83,9 @@ jobs:
       - name: Copy binaries
         shell: bash
         run: |
-          mkdir -p dist
           find artifacts -name "*.node" -exec cp {} . \;
-          find artifacts -name "dist" -type d -exec cp -r {} . \;
+          # Copy dist files from first artifact only (they're identical across builds)
+          cp -r artifacts/binaries-*/dist . || true
 
       - name: Build TypeScript
         run: npm run build:ts
